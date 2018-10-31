@@ -34,8 +34,12 @@
     "standard-version": "^4.4.0"
   },
   "dependencies": {
+    "@masaeedu/adt": "^1.0.3",
+    "@masaeedu/fp": "^7.4.0",
     "camelcase": "^5.0.0",
-    "decamelize": "^1.2.0"
+    "decamelize": "^1.2.0",
+    "natch": "^1.1.1",
+    "parsimmon": "^1.12.0"
   },
   "files": [
     "lib",

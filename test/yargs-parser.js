@@ -8,6 +8,40 @@ var parser = require('../')
 var path = require('path')
 
 describe('yargs-parser', function () {
+  it('should parse flags that happen to be followed by boolean-like values as strings', () => {
+    var argv = parser(['--foo', 'true'])
+    argv.should.have.property('foo')
+    argv.foo.should.equal('true')
+  })
+
+  it('should parse flags that happen to be followed by boolean-like values, when explicitly marked as booleans, as booleans', () => {
+    var argv = parser(['--foo', 'true'], { boolean: 'foo' })
+    argv.should.have.property('foo')
+    argv.foo.should.equal('true')
+  })
+
+  it('should fail to parse quote wrapped booleans as a boolean', () => {
+    var argv = parser(['--foo', '"true"'], { boolean: ['foo'] })
+  })
+
+  it('should not parse arrays by default', () => {
+    var argv = parser('--foo bar baz quux')
+    argv.should.have.property("foo")
+    argv.foo.should.deep.equal("bar")
+    argv._.should.deep.equal(["baz", "quux"])
+  })
+
+  it('should parse the stuff i need appropriately', function (done) {
+    var argv = parser(['run', 'foo', 'bar',  '-Baz quux'])
+    argv._.should.deep.equal(['run', 'foo', 'bar', '-Baz quux'])
+  })
+
+  it('should produce an error when we attempt to parse an option with the wrong kind of value', () => {
+    var argv = parser(['--foo', 'bar'], {
+      number: ['foo']
+    })
+  })
+
   it('should parse a "short boolean"', function () {
     var parse = parser([ '-b' ])
     parse.should.not.have.property('--')
